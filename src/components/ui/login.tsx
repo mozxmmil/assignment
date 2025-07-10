@@ -10,8 +10,10 @@ import React, { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
 import { UserdataTypes } from "../../../types/userData";
 import Button from "../reusable/button";
+import { useUserStore } from "@/zustand/userInfo";
 
 const Login = () => {
+	const setNumber = useUserStore((state) => state.setPhoneNumber);
 	const router = useRouter();
 	const [isLoading, setisLoading] = useState(false);
 	const [userData, setuserData] = useState<UserdataTypes>({
@@ -37,6 +39,7 @@ const Login = () => {
 		e.preventDefault();
 
 		setisLoading(true);
+		setNumber(userData.mobile_number as string);
 		try {
 			const { data } = await axiosClient.post(`/generateOTP`, userData, {
 				headers: {

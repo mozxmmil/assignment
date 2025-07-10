@@ -11,10 +11,10 @@ const Button = ({ className, children }: Props) => {
 				className
 			)}
 		>
-			<div className=" h-full w-full group-hover:-translate-y-full duration-300 px-3 py-2 flex justify-center items-center  gap-4 ">
+			<div className=" h-full w-full group-hover:-translate-y-full duration-300 px-3 py-2 flex justify-center items-center  gap-4  ease-in-out ">
 				{children}
 			</div>
-			<div className=" flex justify-center items-center absolute group-hover:-translate-y-full left-0 w-full h-full duration-300 gap-4">
+			<div className=" flex justify-center items-center absolute group-hover:-translate-y-full left-0 w-full h-full duration-300 gap-4 ease-in-out">
 				{children}
 			</div>
 		</motion.button>
