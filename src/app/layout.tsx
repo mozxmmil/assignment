@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 
-
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -17,6 +17,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`antialiased ${GeistSans.className}`}>
+				<Toaster />
 				{children}
 			</body>
 		</html>

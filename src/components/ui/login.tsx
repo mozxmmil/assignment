@@ -1,19 +1,57 @@
 "use client";
-import { IconArrowNarrowRight, IconSparkles } from "@tabler/icons-react";
-import React from "react";
-import Button from "../reusable/button";
+import { axiosClient } from "@/utils/axios";
+import {
+	IconArrowNarrowRight,
+	IconLoader2,
+	IconSparkles,
+} from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import React, { ChangeEvent, useState } from "react";
+import { toast } from "sonner";
+import { UserdataTypes } from "../../../types/userData";
+import Button from "../reusable/button";
 
 const Login = () => {
 	const router = useRouter();
+	const [isLoading, setisLoading] = useState(false);
+	const [userData, setuserData] = useState<UserdataTypes>({
+		email: "",
+		password: "",
+		mobile_number: "",
+	});
+
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		const { value, name } = e.target;
+
+		setuserData((prev) => {
+			return { ...prev, [name]: value };
+		});
+	};
 	const handlOnInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.stopPropagation();
 		e.target.value = e.target.value.replace(/\D/g, "");
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		router.push("/");
+
+		setisLoading(true);
+		try {
+			const { data } = await axiosClient.post(`/generateOTP`, userData, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			if (data.status) {
+				toast.success(data.data);
+				setisLoading(false);
+				router.push("/otp-verify");
+			}
+		} catch {
+			toast.error("Re-Try");
+			setisLoading(false);
+		}
 	};
 	return (
 		<div className="w-full sm:w-xl  bg-white rounded-2xl sm:px-20 py-10  text-black min-h-60  shadow-outerShadow ">
@@ -31,33 +69,48 @@ const Login = () => {
 					sign in to access your dashboard and continue your work
 				</h2>
 				<form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-5">
-					<div className="flex flex-col gap-2">
-						<label htmlFor="name" className="font-bold">
-							Name
+					<div className="flex flex-col gap-1">
+						<label htmlFor="email" className="font-medium tracking-tight">
+							Email
 						</label>
 						<input
-							type="text"
-							placeholder="Name"
-							id="name"
-							className="p-2 border-1 rounded-md bg-gray-100"
+							name="email"
+							value={userData.email!}
+							onChange={handleChange}
+							type="email"
+							placeholder="email"
+							id="email"
+							className="p-2  rounded-md bg-gray-100 outline-none"
 						/>
 					</div>
-					<div className="flex flex-col gap-2">
-						<label htmlFor="password" className="font-bold">
+					<div className="flex flex-col gap-1 ">
+						<label
+							htmlFor="password"
+							className="font-medium tracking-tight"
+						>
 							Password
 						</label>
 						<input
+							name="password"
+							value={userData.password!}
+							onChange={handleChange}
 							type="password"
 							id="password"
 							placeholder="password"
-							className="p-2 border-1 rounded-md bg-gray-100"
+							className="p-2  rounded-md bg-gray-100 outline-none"
 						/>
 					</div>
-					<div className="flex flex-col gap-2">
-						<label htmlFor="mobileNumber" className="font-bold">
+					<div className="flex flex-col gap-1">
+						<label
+							htmlFor="mobileNumber"
+							className="font-medium tracking-tight"
+						>
 							Mobile Number
 						</label>
 						<input
+							name="mobile_number"
+							value={userData.mobile_number!}
+							onChange={handleChange}
 							type="tel"
 							placeholder="Enter 10-digit number"
 							id="mobileNumber"
@@ -65,12 +118,16 @@ const Login = () => {
 							maxLength={10}
 							required
 							onInput={handlOnInput}
-							className="p-2 border-1 rounded-md bg-gray-100"
+							className="p-2  rounded-md bg-gray-100 outline-none"
 						/>
 					</div>
 					<Button className="mt-2 bg-gray-800 text-white">
 						Next
-						<IconArrowNarrowRight />{" "}
+						{isLoading ? (
+							<IconLoader2 className="animate-spin" />
+						) : (
+							<IconArrowNarrowRight />
+						)}
 					</Button>
 				</form>
 			</div>
