@@ -1,13 +1,11 @@
-
-
-const personalNames = [
+export const personalNames = [
 	"John Smith",
 	"Tom Wilson",
 	"Emily Johnson",
 	"Sarah Davis",
 	"Mike Brown",
 ];
-const departments = [
+export const departments = [
 	"Accounts",
 	"Human Resources",
 	"Information Technology",
@@ -16,7 +14,7 @@ const departments = [
 ];
 
 // Mock existing tags
-const existingTags = [
+export const existingTags = [
 	"urgent",
 	"confidential",
 	"draft",
@@ -32,11 +30,5 @@ const existingTags = [
 ];
 
 export const FileUpload: React.FC = () => {
-	
-
-	return (
-		<div className="w-full max-w-4xl mx-auto shadow-medium">
-			
-		</div>
-	);
+	return <div className="w-full max-w-4xl mx-auto shadow-medium"></div>;
 };
