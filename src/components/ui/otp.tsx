@@ -4,10 +4,14 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import Button from "../reusable/button";
 import { useUserStore } from "@/zustand/userInfo";
 import { axiosClient } from "@/utils/axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const length = 6;
 const OptComp = () => {
-	const { setToke, phoneNumber } = useUserStore((state) => state);
+	const router = useRouter();
+	const { setData, phoneNumber } = useUserStore((state) => state);
+
 	const inputRef = useRef<Array<HTMLInputElement | null>>([]);
 	const [otp, setOtp] = useState(Array(length).fill(""));
 	const [isLoading, setIsLoading] = useState(false);
@@ -29,13 +33,12 @@ const OptComp = () => {
 		inx: number
 	) => {
 		e.stopPropagation();
-		console.log(inx);
+
 		if (e.key === "Backspace") {
 			if (otp[inx] === "" && inx > 0) {
 				inputRef.current[inx - 1]?.focus();
 			} else {
 				const otpValue = [...otp];
-				console.log(otpValue);
 				otpValue[inx] = "";
 				setOtp(otpValue);
 			}
@@ -48,14 +51,44 @@ const OptComp = () => {
 			mobile_number: phoneNumber,
 			otp: otp.join(""),
 		};
-		const { data } = await axiosClient.post("/validateOTP", dataobj);
-		if (data.status) {
+		try {
+			const { data } = await axiosClient.post("/validateOTP", dataobj);
+
+			if (data.status) {
+				setIsLoading(false);
+				setData(data.data);
+				setOtp((prev) => prev.fill(""));
+				router.push("/");
+			}
 			setIsLoading(false);
-			setOtp((prev) => prev.fill(""));
+			toast.error(data.message);
+		} catch {
+			setIsLoading(false);
+			toast.error("Re-Try");
 		}
 	};
-	const handleSpanClicked = () => {
-		console.log("clicked");
+	const handleSpanClicked = async (e: React.MouseEvent<HTMLSpanElement>) => {
+		e.stopPropagation();
+		setIsLoading(true);
+		try {
+			const { data } = await axiosClient.post(
+				`/generateOTP`,
+				{ mobile_number: phoneNumber },
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+
+			if (data.status) {
+				toast.success(data.data);
+				setIsLoading(false);
+			}
+		} catch {
+			setIsLoading(false);
+			toast.error("Re-Try");
+		}
 	};
 	return (
 		<div className="w-full sm:w-100 rounded-lg shadow-outerShadow  p-5 bg ">
@@ -96,7 +129,7 @@ const OptComp = () => {
 						Resend
 					</span>
 				</h1>
-				<Button className="bg-zinc-900 text-white sm:w-1/2 w-full mt-7">
+				<Button className="bg-zinc-900 text-white sm:w-1/2 md:w-1/2 w-full mt-7">
 					Submit{" "}
 					{isLoading ? (
 						<IconLoader2 className="animate-spin" />
