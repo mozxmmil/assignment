@@ -6,8 +6,8 @@ const Admin = () => {
 	return (
 		<div className="min-h-screen bg-blue-50">
 			<AdminHeader />
-			<main className="py-12 px-6 ">
-				<div className="max-w-xl p-10 mx-auto shadow-outerShadow ">
+			<main className="py-12 sm:px-6 ">
+				<div className="sm:max-w-xl w-full p-10 mx-auto shadow-outerShadow  ">
 					<UserCreationForm />
 				</div>
 			</main>

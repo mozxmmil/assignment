@@ -52,7 +52,7 @@ export const UserCreationForm = () => {
 	};
 
 	return (
-		<div className="max-w-2xl mx-auto">
+		<div className="sm:max-w-2xl w-full mx-auto">
 			<div className="shadow-elegant border-0 bg-card">
 				<div className="text-center pb-8">
 					<div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
