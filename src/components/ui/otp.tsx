@@ -59,7 +59,7 @@ const OptComp = () => {
 				setIsLoading(false);
 				setData(data.data);
 				setOtp((prev) => prev.fill(""));
-				router.push("/");
+				router.push("/fileUpload");
 			} else {
 				setIsLoading(false);
 				toast.error(data.message);
