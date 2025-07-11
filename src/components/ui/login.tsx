@@ -57,7 +57,7 @@ const Login = () => {
 		}
 	};
 	return (
-		<div className="w-full sm:w-xl  bg-white rounded-2xl sm:px-20 py-10  text-black min-h-60  shadow-outerShadow ">
+		<div className="w-full sm:w-lg  bg-white rounded-2xl sm:px-20 py-10  text-black min-h-60  shadow-outerShadow ">
 			<div className=" p-4 sm:p-0">
 				<div className="flex items-center gap-2 mx-auto justify-center">
 					<IconSparkles className="text-blue-400 size-10" />

@@ -55,13 +55,15 @@ const OptComp = () => {
 			const { data } = await axiosClient.post("/validateOTP", dataobj);
 
 			if (data.status) {
+				toast.success("verify success");
 				setIsLoading(false);
 				setData(data.data);
 				setOtp((prev) => prev.fill(""));
 				router.push("/");
+			} else {
+				setIsLoading(false);
+				toast.error(data.message);
 			}
-			setIsLoading(false);
-			toast.error(data.message);
 		} catch {
 			setIsLoading(false);
 			toast.error("Re-Try");
